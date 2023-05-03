@@ -1,0 +1,108 @@
+1. Enter the number of hours it took you to complete the project between
+   the <<< and >>> signs below (eg, <<<10>>>).
+
+   <<<8>>>
+   
+2. Enter the difficulty level (1: very easy; 5: very difficult) of the project
+   between the <<< and >>> signs below (eg, <<<3>>>).
+
+   <<<3>>>
+
+3. Did you receive help from anyone? List their names, status (classmate, 
+   CS451/651 grad, TA, other), and the nature of help received.
+
+   Name               Status       Help Received
+   ----               ------       -------------
+   N/A
+
+4. Provide a short description of how you approached each problem, issues you 
+   encountered, and how you resolved those issues.
+
+   Problem 1 (Using CLEmitter)
+      Approach: Having taken CS310, CS341, and CS450 already, I found this 
+      problem fairly straightforward. The input parsing code was copied from
+      GenFactorial, as was the output code albeit with a few alterations to 
+      match the expected string. The isPrime() method had to be built from
+      scratch, using j-- syntax for standard stack machine procedures. 
+
+      Issues and resolution: The only issue I had, which did take me over an 
+      hour to figure out, was how to emulate boolean behaviors in j-- stack
+      machine syntax. The textbook indicates that booleans are actual primitives
+      in this language, but there are no JVM instructions that work with 
+      booleans. I eventually realized that the behavior of booleans is just to
+      be emulated with integers, with a 0 value meaning false and 1 meaning true
+      as in many other programming languages, and from there I found the 
+      assignment fairly rote.
+
+   Problem 2 (Arithmetic Operations)
+      Approach: I implemented these methods in the exact method outlined by the
+      instructions. First, I added "/" and "%" to TokenInfo.java, in the 
+      "operators" section. Then I modified Scanner.java to recognize those 
+      operations. Parser.java just needed additional code in the 
+      multiplicativeExpression block, as division and modulo have the same 
+      precedence as multiplication, and "+" had to be implemented in the 
+      unaryOperators section right next to Unary Minus. Finally, analyze() and 
+      codegen() had to be implemented for each, using the same syntax as every
+      other operation, but changing the JVM code of the instructions; Unary plus
+      has no effect when acting on an integer, so the instruction for that 
+      operation is "NOP", which has no effect.
+
+      Issues and resolution: Initially, I implemented "%" and "/" both by just 
+      adding them as new symbols in Scanner.java, and while this worked for "%",
+      "/" did not. I eventually figured out that it requires editing the first 
+      section of code that is meant to exclude comments. 
+
+   Problem 3 (Bitwise Operations)
+      Approach: The Approach for implementing the bitwise operations was almost
+      exactly the same as that for implementing the arithmetic operations. The 
+      tokens had to be added to TokenInfo.java, input rules had to be 
+      established in Scanner.java, Parser.java needed sections to create
+      instances of the correct classes, and analyze() and codegen() had to be
+      implemented for each operation using the same syntax as every other 
+      operation. The only difference for this part was the need to actually
+      implement precedence; I did this by looking up the actual precedence order
+      for Java, then putting them in that order in Parser.java. This required
+      changing the flow from class to class to detour to the classes I was 
+      implementing. Also, since bitwise not does not have a JVM instruction, I
+      implemented it by simply pushing -1 to the stack and calling the XOR 
+      instruction.
+
+      Issues and resolution: I had a similar issue for "&" as I had had for "/"
+      in the previous problem; I did not notice that there was already code in 
+      Scanner.java to tokenize "&&", and that code had to be edited to implement
+      tokenization of "&".
+
+   Problem 4 (Shift Operations)
+      Approach: The approach for problem 4 was exactly the same as for 
+      Problem 3, and I will not rehash the procedure yet again; at this point I
+      was getting comfortable with implementing these and the process felt rote.
+      The key part of the process was implementing precedence in Parser.java 
+      correctly, which I did the same way as in problem 3. Also, the right shift
+      operations were part of the same block of code in Parser.java as they
+      are represented with the same symbol, but that code is just some nested
+      if statements.
+
+      Issues and resolution: As in problems 2 and 3, there was an operation 
+      (arithmetic left shift) that conflicted with existing code that was meant
+      to prevent compilation of non-implemented operations. That code needed to 
+      be adapted to include the new operation, while still preserving the 
+      error message for the non-implmented procedure.
+
+5. List any other comments here. Feel free to provide any feedback on how
+   much you learned from doing the assignment, and whether you enjoyed
+   doing it.
+
+   I enjoyed this assignment; I found it interesting to have, as it was 
+   described in the lectures and texbook, a non-trivial program to look 
+   through and to study the structure of. I was quite frustrated at the 
+   beginning of the assignment when I could not figure out how to implement
+   booleans, and while I knew the behavior of booleans could be emulated with
+   integers (and indeed, at a hardware level, must be implemented with integers)
+   it took me hours to realize that that was the only way to do it. It would 
+   have been nice for that point to have been in either the textbook or the 
+   lecture slides; if it had been said in class, I had forgotten hearing it, and
+   the book specifically says that booleans are an established primitive type
+   in j--, which threw me off. I think I learned quite a bit about how compilers
+   implement rudimentary parsing and bytecode of basic operations, the 
+   assignment did a good job of illustrating the more abstract concepts 
+   discussed in class.

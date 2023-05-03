@@ -1,0 +1,183 @@
+Compiled from "Operators.java"
+public class Operators {
+  public Operators();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: return
+
+  public static void main(java.lang.String[]);
+    Code:
+       0: aload_0
+       1: iconst_0
+       2: aaload
+       3: invokestatic  #7                  // Method java/lang/Integer.parseInt:(Ljava/lang/String;)I
+       6: istore_1
+       7: aload_0
+       8: iconst_1
+       9: aaload
+      10: invokestatic  #7                  // Method java/lang/Integer.parseInt:(Ljava/lang/String;)I
+      13: istore_2
+      14: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+      17: iload_1
+      18: iload_2
+      19: if_icmpeq     26
+      22: iconst_1
+      23: goto          27
+      26: iconst_0
+      27: invokevirtual #19                 // Method java/io/PrintStream.println:(Z)V
+      30: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+      33: iload_1
+      34: iload_2
+      35: idiv
+      36: dup
+      37: istore_1
+      38: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+      41: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+      44: iload_1
+      45: iload_2
+      46: isub
+      47: dup
+      48: istore_1
+      49: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+      52: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+      55: iload_1
+      56: iload_2
+      57: imul
+      58: dup
+      59: istore_1
+      60: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+      63: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+      66: iload_1
+      67: iload_2
+      68: irem
+      69: dup
+      70: istore_1
+      71: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+      74: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+      77: iload_1
+      78: iload_2
+      79: ishr
+      80: dup
+      81: istore_1
+      82: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+      85: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+      88: iload_1
+      89: iload_2
+      90: iushr
+      91: dup
+      92: istore_1
+      93: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+      96: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+      99: iload_1
+     100: iload_2
+     101: if_icmplt     108
+     104: iconst_1
+     105: goto          109
+     108: iconst_0
+     109: invokevirtual #19                 // Method java/io/PrintStream.println:(Z)V
+     112: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     115: iload_1
+     116: iload_2
+     117: ishl
+     118: dup
+     119: istore_1
+     120: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+     123: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     126: iload_1
+     127: iload_2
+     128: if_icmpge     135
+     131: iconst_1
+     132: goto          136
+     135: iconst_0
+     136: invokevirtual #19                 // Method java/io/PrintStream.println:(Z)V
+     139: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     142: iload_1
+     143: iload_2
+     144: ixor
+     145: dup
+     146: istore_1
+     147: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+     150: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     153: iload_1
+     154: iload_2
+     155: ior
+     156: dup
+     157: istore_1
+     158: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+     161: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     164: iload_1
+     165: iload_2
+     166: if_icmpeq     174
+     169: iload_2
+     170: iload_1
+     171: if_icmpne     178
+     174: iconst_1
+     175: goto          179
+     178: iconst_0
+     179: invokevirtual #19                 // Method java/io/PrintStream.println:(Z)V
+     182: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     185: iload_1
+     186: iload_2
+     187: iand
+     188: dup
+     189: istore_1
+     190: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+     193: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     196: iload_1
+     197: iinc          1, 1
+     200: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+     203: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     206: iinc          2, -1
+     209: iload_2
+     210: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+     213: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     216: iload_1
+     217: iload_2
+     218: idiv
+     219: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+     222: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     225: iload_1
+     226: iload_2
+     227: irem
+     228: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+     231: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     234: iload_1
+     235: iload_2
+     236: ishl
+     237: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+     240: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     243: iload_1
+     244: iload_2
+     245: ishr
+     246: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+     249: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     252: iload_1
+     253: iload_2
+     254: iushr
+     255: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+     258: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     261: iload_1
+     262: iconst_m1
+     263: ixor
+     264: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+     267: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     270: iload_1
+     271: iload_2
+     272: ior
+     273: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+     276: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     279: iload_1
+     280: iload_2
+     281: ixor
+     282: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+     285: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     288: iload_1
+     289: iload_2
+     290: iand
+     291: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+     294: getstatic     #13                 // Field java/lang/System.out:Ljava/io/PrintStream;
+     297: iload_1
+     298: invokevirtual #25                 // Method java/io/PrintStream.println:(I)V
+     301: return
+}

@@ -1,0 +1,3 @@
+# RAID
+
+This project was to implement the RAID 2 algorithm in C. The file raid.c encodes a given text file into 7 binary files; 4 files containing bit striped data, 3 containing parity data according to Hamming codes. diar.c decodes a collection of 7 binary files encoded by raid.c back into a text file. Because of how Hamming code parity calculations work, the contents of any one of those 7 files can be deleted without affecting the results.

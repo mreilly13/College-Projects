@@ -1,0 +1,196 @@
+*******************************************************************************
+*                                   bsh                                       *
+*                    Michael Reilly and Raymond Huang                         *
+*******************************************************************************
+
+                                 overview
+
+    The general strategy we employed was to not fundamentally alter the 
+structure of the program, to make it easier to write in the limited time we had.
+None of the required features are implemented with helper functions; all 
+functionality was added as part of main(), either  before the primary loop to 
+initialize variables or inside if they are part of the actual functionality. 
+While this makes the code less maintainable, it was also faster to develop. We
+also followed the suggestion of allocating and deallocating memory for variables
+whenever needed, instead of using the system functions that handle memory 
+allocation automatically. The only changes made to the existing structure were 
+to modify the call to fgets() to actually use the return value, to supress the 
+warning and to make the code more defensive; if fgets() breaks somehow and 
+returns NULL, the program will stop gracefully instead of crashing. 
+
+                                    exit
+
+    As exit was already implemented and already worked, we did not touch the 
+code for it. As we are not required to do so, we did not add the ability to 
+intercept system commands such as ^d or ^c to work in the same way as fully 
+featured shell programs.
+                                    
+                                    env
+
+    To implement all environment variable functions, we followed the 
+instructions and created a new list of the environment variables at the start of
+main() and counts how many such variables there are, before entering the loop. 
+The env command then just iterates over that list, printing each element until 
+the index reaches the known count of environment variables. 
+
+                                  setenv
+
+    To implement setenv, we again followed the instructions, iterating through
+the internal environment variable list and comparing the passed environment
+variable name to the actual environment variable names, using strncmp() to 
+compare only the first characters of the environment variables. If a match is
+found, that variable is unset, then reset to be the passed variable name, 
+concatenated with an equals sign, concatenated with the passed value. If a match
+is not found, the length of the environment variable list is checked; if it is 
+less than the MAXENV variable, the new environment variable is set in the same 
+way and the length variable is incremented, and if it is at least MAXENV, an 
+error message is printed instead.
+
+                                 unsetenv
+
+    To implement unsetenv, we used the same basic procedure as for setenv, 
+iterating over the environment variable list searching for a match. If a match
+is found, that variable is removed from the list, all subsequent elements of the
+list are moved up in the list to close the gap, and the value of the count 
+variable is decremented. If no match is found, the function prints an error 
+message. We decided to implement unsetenv in this way to make env and setenv
+simpler to write, as they don't have to make extra checks to whether the 
+index about to be checked is NULL because it was removed; this has no effect on
+the big O runtime of the functions, they are all still O(n), it just affects the
+actual runtime by forcing setenv to always iterate to the end of the list and
+forcing unsetenv to do significantly more memory management, which is slower 
+than simply changing variable values.
+
+                                    cd
+
+    To implement cd, we first have a check to whether cmdArg[1] is NULL, which
+implies that the target directory should be the value of the HOME variable. If
+this is the case, the procedure iterates through the environment variable list
+until the entry for the HOME variable is found, then sets cmdArg[1] to be the 
+value of that variable. Then, the chdir() command is called with cmdArg[1] as 
+its argument, and if that call is successful the procedure again iterates 
+through the environment variable list until the PWD variable is found, and
+updates PWD to have the value returned by a call to getcwd(). A strategy of 
+graceful error detection that we used extensively in this project, including 
+here, is to check whether the environment variable is even in the list before
+trying to use its value, and to print an appropriate error message if it is not
+found and cannot be added to the list of environment variables (because the list
+is already of length MAXENV).
+
+    Our original strategy to update the value of the PWD variable was to simply
+use the passed input string as the new value. This worked for full file paths,
+but did not work for relative file paths or the . and .. operators. Instead of
+creating parsing rules to get the current value of PWD when one of those input
+paths was detected, we switched to using getcwd(), as it is both much simpler to 
+write, and we ended up with more maintainable code.
+
+                                  history
+
+    To implement history, we created a new list variable to hold the passed 
+commands as strings, and a counter for the total number of commands entered. 
+Passed commands are saved to this list with the current count as soon as a 
+command is entered, before even parsing the commands. We decided to do this in
+this manner for two reasons: it is much easier to implement, without needing to
+iterate over the cmdArg list, but also this is how the actual history command
+formats its records; if a command contains concatenated symbols, the history 
+record for that command will also. This list is implemented as a stack, which 
+was the easiest way we could think to keep track of the 500 most recently 
+entered commands; if the length of the list is 500, the last command is just 
+dropped off the list, instead of being pushed down. This slightly reduces the 
+performance for the first 500 commands entered, as extra memory management is 
+done, but massively simplifies the code and has no effect on the big-O runtime 
+of the function, which is still O(n).
+
+                                  minix commands
+    
+    To implement minix commands, we again followed the recommended procedure in
+the assignment. First iterate through the environment variables looking for 
+PATH, then use strsep() to iterate through the file paths in PATH, append the 
+given command to these paths, and then check if this file path is a valid 
+executable. If a valid executable is found, immediately fork the current process
+and run that executable. If the entire PATH variable is iterated through without
+finding the passed command, an error message is printed.
+
+    This implementation satisfies the requirements of the assignment, but we 
+were not satisfied; this implementation only allowed the execution of files that
+are in the PATH, even if the filepath to that executable is given; for example,
+bsh could not execute the command './bsh' . To fix this, we added an additional 
+check for whether the passed argument is a valid filepath (if it contains / ),
+and if it is first check whether it explicitly refers to a valid executable and
+execute it in the same manner if so.
+
+                                 I/O redirection
+
+    I/O redirection was implemented as a set of checks immediately following the
+parsing of the original command. If an argument is "<" or ">", we opened and 
+closed the standard input or output as outlined in the project documentation. 
+This implementation worked, but it required additional code in the cleanup 
+section to reset the standard input and output after execution of a command,
+facilitated by having initialization code outside the loop, which called dup()
+on stdin and stdout, to preserve them and allow them to be duplicated at the
+end of the loop. This redirection is only performed if the command is to be
+executed, as determined by a flag that was needed to properly implement pipes.
+
+    Our original implementation followed the entire process outlined in the 
+project documentation, only performing this check in the section of the program
+for handling minix commands, because that is where forking happens in the code.
+However, this prevented I/O redirection with the built-in commands. The 
+instructions were not clear about whether or not this was required, but this 
+approach is more in line with how bash and other common shell programs work.
+
+                                parsing commands
+
+    To parse out commands that are input without spaces between operators, we
+wrote C code in the parsing section that used the strpbrk() function to check 
+for one of three conditions:
+
+1. An argument starts with a <, >, or |, and has a length greater than 1
+2. An argument ends with a <, >, or |, and has a length greater than 1
+3. An argument has a <, >, or | somewhere in the middle of it
+
+The first two of these conditions will split the argument into two new arguments
+(deleting the last argument if the length of cmdArg is already MAXARG), and the
+last condition splits the argument into three new arguments (deleting up to two
+arguments if the length of cmdArg is greater than (MAXARG - 2) ).
+
+                                    pipe
+
+    To implement piping, we started by copying the code from pipeDemo.c into our
+code, then modifying the names of variables to do what we wanted. Instead of
+duplicating the execution code we had already written to execute each side of 
+the pipe directly in this section of the code, which would have prevented piping
+with built-in commands, we instead set up the program so that piping 
+subprocesses "fall through" into the existing code, with two new flags so that 
+only the correct parts of the process are executed: 
+
+1. An "exec" flag, needed to stop the base shell from executing the base
+command of the input or performing IO redirection and overwriting the output of 
+the pipe processes.
+2. A "stop_exec" flag, needed to stop the subprocesses from looping and becoming
+full bsh processes, allowing them to use the existing memory management code and
+end graceully.
+
+                    notable omissions / future improvements
+
+    Due to our fundamentally limited time, there are features of standard shell
+programs that were not required, and therefore we did not implement in our 
+program. The most glaring omission is a robust help functionality; This 
+documentation and the in-code comments are the only documentation of how to use
+bsh . We also did not implement handling for system commands, making this shell
+program fundamentally too limited to actually use as a shell program in a real-
+world situation. We did not implement any error logging functionality, or the 
+ability for history to persist between instances of the shell. Finally, the 
+debugging functionality was expanded somewhat, to output similar messages for 
+every command type as the provided debugging output for "exit", but this 
+certainly could have been made more robust and useful.
+
+    The code for this shell program could be significantly cleaned up by 
+implementing helper functions, especially for some of the more routine tasks, 
+such as iterating through the environment variables looking for a specific
+entry. Such improvements would make the code more modular and generally useful,
+but also more maintainable. As this was not part of the grade, we focused on
+simply getting the code working, sometimes copying entire blocks of code with
+minor or even no changes, which is exactly where helper functions should be 
+used. Also, the inline documentation is fairly barebones; it explains what 
+blocks of code are for, but it does not explain what each variable or 
+calculation is for.

@@ -1,0 +1,195 @@
+1. Enter the number of hours it took you to complete the project between
+   the <<< and >>> signs below (eg, <<<10>>>).
+
+   <<<8>>>
+   
+2. Enter the difficulty level (1: very easy; 5: very difficult) of the project
+   between the <<< and >>> signs below (eg, <<<3>>>).
+
+   <<<3>>>
+
+3. Did you receive help from anyone? List their names, status (classmate, 
+   CS451/651 grad, TA, other), and the nature of help received.
+
+   Name               Status       Help Received
+   ----               ------       -------------
+   N/A
+
+4. Provide a short description of how you approached each problem, issues you 
+   encountered, and how you resolved those issues.
+
+   Problem 1 (Long and Double Basic Types): 
+      Approach: I looked for places in the code where other
+      basic types, like integers, are referenced, and added similar code for
+      long and double handling.
+
+      Issues and resolution: Originally, I did not realize basic types were 
+      parsed in so many places: at first, I only added the part for parsing 
+      literals, not the additions to seeBasicType(), seeReferenceType(), or 
+      basicType(). After realizing my mistake, I just continued mimicking the 
+      existing code structure, being careful not to miss any references to 
+      integers, and it worked.
+
+   Problem 2 (Operators): 
+      Approach: I used the same strategy for implementing 
+      operators that I used in project 1: I mimicked the implementation of the
+      existing operators that work similarly to the ones I needed to implement,
+      putting operators in the blocks that correspond to their precedence. If
+      an operator needed its own precedence level, I would simply alter the
+      recursive tree to insert the block I needed in the correct place.
+
+      Issues and resolution: None; my first attempt at implenenting my plan for 
+      the code worked perfectly.
+
+   Problem 3 (Conditional Expression): 
+      Approach: I created a new code block in the correct place in the hierarchy
+      for a ternary expression. This block started the same way as the other
+      precedence blocks, parsing expressions while looking for the two required
+      symbols for a ternary expression, ? and : , in order. If the correct 
+      symbol is not found, the code either assumes it was not a ternary 
+      expression and continues down the tree or reports an error, respectively.
+
+      Issues and resolution: None; my first attempt at implenenting my plan for 
+      the code worked perfectly.
+
+   Problem 4 (Do Statement): 
+      Approach: I found in the code the statement() method, which contains the
+      code for already existing statements such as while loops. I copied the
+      structure of these implementations, borrowing from my plan in problem 3
+      of using nested if statements to check for tokens sequentially and 
+      reporting errors when appropriate, and following the grammar to decide 
+      which recursive method to use to parse the different components. 
+
+      Issues and resolution: None; my first attempt at implementing my plan for 
+      the code worked perfectly.
+
+   Problem 5 (For Statement):
+      Approach: According to the grammar, implementing a for statement requires
+      two new methods: one to parse the initialization of the for loop, and one 
+      to parse the update of the for loop. I structured these methods after the
+      formalParameters() method, changing the contents to match what the grammar
+      says they are supposed to accept. forInit() looks for either an identifier
+      or a basic type, calling localVaraibleDeclarationStatement() if found, 
+      and otherwise parses the next tokens by adding to a list a sequence of 
+      statementsExpression() calls. In contrast, forUpdate() always parses as a 
+      sequence of statements. 
+
+      For the actual implementation of parsing for, in statement(), I first 
+      tried the same structure as I had used for the previous problems, but in 
+      the process of debugging I realized that a sequence of nested ifs is 
+      actually unnecessary, as the mustBe() method does exactly what I was using
+      the if statements for, including error reporting, so I switched to just 
+      implementing the sequence of function calls required by the grammar,saving
+      the return values in variables, and ending with the constructor to 
+      JForStatement(), passing the stored variables. I then went back and 
+      updated the parsing of a do statement to match this simpler structure; 
+      while my previous implementation worked, it made for inelegant code and
+      the error handling was less effective.
+
+      Issues and resolution: I had three main issues in this section. First,
+      my implementation of forInit() was not properly detecting primitive 
+      variable declarations, so I needed to add an additional call to 
+      seeBasicType(). The second was with the handling of the semicolons in the
+      parenthetical part of a for statement; I assumed that I had to manually
+      parse all of the semicolons, but the first semicolon was actually parsed
+      inside of forInit() and I did not need to handle it in the main 
+      implementation in statement(). 
+      
+      Finally, I realized after doing problems 6 and 7 that I had made a 
+      mistake, that my parsing of for always had a value for init, condition, 
+      and update, even if those were empty in the actual for statement. I fixed 
+      this by modifying forInit() and forUpdate() so that they first check to 
+      see if the token that comes after their respective statement is the next 
+      token, indicating that that statement is missing, and returns null if so. 
+      Because the condition section is handled by expression() following the 
+      recursive structure, I could not modify a single method to do this check, 
+      so instead this check is performed by statement() itself.
+
+   Problem 6 (Break Statement):
+      Approach: The grammar for a break statement is extremely simple: after the
+      word break, there must be a semicolon. I added these two lines of code in 
+      a conditional check in statement() for the token BREAK.
+
+      Issues and resolution: I had no issues with implementing the break 
+      statement itself, but testing the break statement highlighted an issue 
+      with my code for parsing for statements, which I outlined how I fixed 
+      above.
+
+   Problem 7 (Continue Statement): 
+      Approach: The grammar for a continue statement is extremely simple: after 
+      the word break, there must be a semicolon. I added these two lines of code
+      in a conditional check in statement() for the token CONTINUE.
+
+      Issues and resolution: I had no issues with implementing the continue
+      statement itself, but testing the continue statement highlighted an issue 
+      with my code for parsing for statements, which I outlined how I fixed 
+      above.
+
+   Problem 8 (Switch Statement): 
+      Approach: To implement a switch statement, I defined a method
+      switchBlockStatementGroup() according to the grammar, which parses a 
+      sequence of case statements and then block statements. Then, in 
+      statement() I add a check for the switch token, parsing the condition
+      clause first, then repeatedly calling switchBLockStatementGroup() until
+      the ending curly brace, or EOF, is reached.
+
+      Issues and resolution: I had two main issues with this problem. The first
+      issue I had was that I did not realize that a default case is supposed to
+      append a null to the case list. This caused a problem, because the way I
+      was implementing the switchLabel grammar was as a separate method, and
+      this method had no way of communicating to switchBlockStatementGroup() 
+      whether the null value was because of a default case or because a code
+      block was reached. To fix this, I just moved the parsing code from 
+      this second method directly into switchBlockStatementGroup(), appending
+      null if a default case is reached and appending nothing if a block is 
+      reached, and removed the second method. The second issue I had was that I 
+      was accidentally parsing the curly bracket at the end of the switch 
+      statement twice; to fix this I simply had to remove the second parse 
+      expression.
+
+   Problem 9 (Exception Handlers): 
+      Approach: Code for exception handling had to go in two places. In 
+      statements(), I put handling for try/catch/finally and throw statements, 
+      using the same procedure as all the other problems: follow the grammar, 
+      parsing required sections with have() or mustBe() and optional/repeated 
+      sections with if and while statements. Throws had to be implemented in 
+      memberDecl(), however. I started by implementing the code exactly as I had
+      been, but quickly realized that constructors, void, and typed methods all 
+      need the exact same code for parsing throws declarations. So, I created a 
+      separate method, throwsDeclaration(), that has that code and can be called
+      in all three places.
+
+      Issues and resolution: None; my first attempt at implenenting my plan for 
+      the code worked perfectly.
+
+   Problem 10 (Interface Type Declaration): 
+      Approach: Interface parsing required modifying a small amount of code in
+      the methods that handle class definitions to support implements, and some 
+      code in typeDeclaration() to determine whether to parse as a class or an 
+      interface, but most of the work was in declaring new methods: 
+      interfaceDeclaration(), interfaceBody(), and interfaceMemberDecl(). All of
+      these methods were copied from their corresponding methods for parsing 
+      classes, then modified to correctly parse interfaces according to the
+      grammar. 
+
+      Issues and resolution: The only issue I had was that interface methods
+      are assumed to be abstract, whether or not they are declared as such; the 
+      parser is supposed to explicitly tell JInterfaceDeclaration that interface
+      methods are abstract, which my implementation did not. I fixed this with 
+      an additional check  in interfaceBody().
+
+5. List any other comments here. Feel free to provide any feedback on how
+   much you learned from doing the assignment, and whether you enjoyed
+   doing it.
+
+   I enjoyed this project significantly more than the last one. The previous 
+   project felt very rote, there were not many opportunities to actually think
+   when doing the problems, basically all of the issues that arose were 
+   syntactic in nature. In contrast, this project actually requires 
+   understanding the underlying structure of the j-- compiler much more, and
+   there were chances to try to solve logical issues. I think I understand the
+   compiler parsing procedure significantly better than I did when I started 
+   this assignment. This project also got me to pay closer attention to the 
+   signature of methods and classes that I needed to use to solve the problems,
+   they were very specific, which got me to understand how the different pieces
+   of the j-- compiler specifically fit together. 

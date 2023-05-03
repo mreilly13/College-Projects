@@ -1,0 +1,256 @@
+1. Enter the number of hours it took you to complete the project between
+   the <<< and >>> signs below (eg, <<<10>>>).
+
+   <<<10>>>
+   
+2. Enter the difficulty level (1: very easy; 5: very difficult) of the project
+   between the <<< and >>> signs below (eg, <<<3>>>).
+
+   <<<3>>>
+
+3. Did you receive help from anyone? List their names, status (classmate, 
+   CS451/651 grad, TA, other), and the nature of help received.
+
+   Name               Status       Help Received
+   ----               ------       -------------
+   N/A
+
+4. Provide a short description of how you approached each problem, issues you 
+   encountered, and how you resolved those issues.
+
+   Part I (Additions to JavaCC Scanner)
+
+   Problem 1 (Multiline Comment)
+      Approach: As instructed in the project description, I modeled my code 
+      after the existing comment code, just changing the specific symbols that
+      the tokens are associated with to the symbols for multiline comments: 
+      "/*" to start and "*/" to end.
+
+      Issues and resolution: The only issue I had was that I did not realize 
+      that this file is declaring the tokens, not using them, so I did not 
+      change the names of the tokens when I copied the existing comment code,
+      which threw numerous "Multiply defined lexical token name ___" errors. To
+      fix this, I just had to give the new tokens different names, and then it
+      compiled and worked perfectly.
+
+   Problem 2 (Operators)
+      Approach: My approach to this problem was similar to my approach in 
+      problem 1: I copied the existing syntax that implemented operations, just
+      changing the names of the tokens and the strings associated with them to 
+      the names and symbols of the new operations.
+
+      Issues and resolution: None; my first attempt at implenenting my plan for 
+      the code worked perfectly.
+
+   Problem 3 (Reserved Words)
+      Approach: My approach to this problem was exactly the same as problem 2: I
+      copied the existing token syntax, replacing the existing names and 
+      identifiers for the tokens with those to be implemented in this problem.
+
+      Issues and resolution: The only issue I had was that the token name 
+      "DEFAULT" already exists in the file, as part of the syntax for 
+      implmenting tokens with multiple possible states. To fix this, I simply 
+      had to rename the token for "default" from DEFAULT to DEFLT, in accordance
+      with the grammar.
+
+   Problem 4 (Literals)
+      Approach: My approach for this problem was to copy the definition of a 
+      Long and Double literal from the grammar (including the required component
+      tokens), then modify them to conform to the syntax of these token 
+      declarations, by putting angle brackets around token names and using
+      actual regex syntax.
+
+      Issues and resolution: I had quite a bit of trouble with this problem, all
+      related to the syntax. My approach was sound and once I figured out the 
+      syntax everything worked perfectly, but I did not realize at first that 
+      these are actual regular expressions, not the pseudo-regex syntax we have
+      been using thus far in this course. Specifically, I was having issues with
+      brackets: in this syntax, a bracket indicates a set of characters, only 
+      one of which can be valid, but I was assuming that brackets around an 
+      expression still meant that expression is optional. I eventually realized
+      I need to replace the brackets with parenthesis and put a question mark
+      after the optional clauses.
+
+   Part II (Additions to JavaCC Parser)
+
+   Problem 5 (Long and Double Basic Types)
+      Approach: For this problem, I search the entire file for all references to
+      basic types, and implemented longs and doubles in the same way that the
+      already defined basic types were implemented. Specifically, I had to 
+      modify the basicType() and literal() functions, adding code identical to
+      the implementation for integers, just changing int to long/double.
+
+      Issues and resolution: I originally only searched for "INT_LITERAL", and
+      only implemented longs and doubles in literal(), where the tokens are
+      referred to as literals. When the test of BasicTypes.java failed, I then
+      searched for "INT" without "LITERAL", and while there were many more 
+      places to search, I eventually found the other place I needed to 
+      implement the literals, basicType().
+
+   Problem 6 (Operators)
+      Approach: For this problem, I used the j-- grammar to implement operators
+      according to the required precedence, by copying the existing syntax for
+      already implemented operators. The comparison operators |, ^, ||, and &, 
+      as well as the shift operators, all required their own methods to be 
+      compliant with the grammar precedence; those methods are simply 
+      copies of the method for conditionalAnd, modified to correctly implement
+      the operations. This also required modifying the methods for assignment, 
+      conditionalAnd, equality, relational, and attitive expressions, to get 
+      them to call the correct methods according to the grammar.
+
+      Issues and resolution: The only issue I had with this problem was a typo
+      for the shift operators: I originally created a JLRightShiftOp instead of
+      a JLRightShiftAssignOp to implement LRSHIFT_ASSIGN. After correcting this,
+      all the operators worked correctly.
+
+   Problem 7 (Conditional Expression)
+      Approach: For this problem, I used the j-- grammar to determine where in 
+      the precedence the implementation for a conditional expression needed to 
+      go, then created a new parsing method. This method started the same way
+      as any of the other expression parsing methods, by getting the line 
+      number, then followed the grammar, checking for a question mark, parsing
+      an expression, parsing a colon, and parsing a conditional-or expression if
+      a question mark is found, then calling JConditionalExpression with the
+      correct arguments as defined in that class's constructor.
+
+      Issues and resolution: The only issue I had was that I had forgotten to
+      modify the method before conditionalExpression() in the precedence, 
+      assignmentExpression(), to call it, so conditional expressions were not 
+      parsed at all. After fixing this, my implementation worked correctly.
+
+
+   Problem 8 (Do Statement)
+      Approach: For this problem, I implemented the do statement in the method 
+      statement(), in accordance with the grammar. A do statement parses DO, 
+      then a statement, then WHILE, then a parExpression, and finally SEMI, so
+      I created a branch in statement() to check for those in order, then create
+      a JDoStatement instance with the appropriate arguments according to the 
+      constructor of that class.
+
+      Issues and resolution: None; my first attempt at implenenting my plan for 
+      the code worked perfectly.
+
+   Problem 9 (For Statement)
+      Approach: To implement a for statement, I followed the grammar exactly to
+      implement a for statement in statement(), the same way I implemented a do
+      statement in problem 8. This required defining two new helper methods,
+      forInit() and forUpdate(), that also each follow the grammar, parsing the
+      correct types of symbols and calling the existing method 
+      statementExpression() to parse statements, but forInit also parses 
+      variableDeclarators() if the first symbol of the statement being parsed is
+      a type.
+
+      Issues and resolution: The first issue I had was in getting ant to 
+      compile. The problem was in type mismatches: forInit and forUpdate needed 
+      to be ArrayLists of JStatements, and they were not declared as such 
+      everywhere. I had accidentally declared them as JStatements in 
+      statement(), the return types for their corresponding methods forInit() 
+      and forUpdate() were also declared as JStatements, despite both methods 
+      actually returning the right object, an ArrayList of JStatements. 
+      Correcting all my declarations fixed my compilation issues.
+
+      The second issue I had was in my construction of the forInit() and 
+      forUpdate() methods. According to the grammar, these are supposed to check
+      for statementExpressions, but my implementation was checking for 
+      statements, which was removing extra semicolons and was causing parsing to
+      fail. Making this correction allowed the parsing of ForStatement.java .
+
+      The third and final issue I had was actually not with the implementation
+      of a for statement, but was with my implementation of increment and 
+      decrement expressions. I was getting the correct output in 
+      ForStatement.ast, but javacc was throwing an error that a statement did
+      not have a side effect. after much investigation, I realized that I had
+      forgotten to add preDecrement and postIncrement to statementExpression()
+      as expressions with byproducts in their implementation.
+
+   Problem 10 (Break Statement)
+      Approach: For this problem, I implemented a parsing branch in statement()
+      according to the grammar for a break statement, using the same structure
+      as the other statements that have been implemented. Since a break 
+      statement is so simple, this just required parsing the token <BREAK>, 
+      getting the line number, then parsing the token <SEMI>, and calling the 
+      JBreakStatement constructor if both of those parses were successful.
+
+      Issues and resolution: None; my first attempt at implenenting my plan for 
+      the code worked perfectly.
+
+   Problem 11 (Continue Statement)
+      Approach: For this problem, I implemented a parsing branch in statement()
+      according to the grammar for a continue statement, using the same 
+      structure as the other statements that have been implemented. Since a 
+      continue statement is so simple, this just required parsing the token 
+      <CONTINUE>, getting the line number, then parsing the token <SEMI>, and 
+      calling the JBreakStatement constructor if both of those parses were 
+      successful.
+
+      Issues and resolution: None; my first attempt at implenenting my plan for 
+      the code worked perfectly.
+
+   Problem 12 (Switch Statement)
+      Approach: My approach for this problem was much the same as my approach 
+      to problem 9: I added parsing rules in statement() that follow the grammar
+      for a switch statement. This required two helper methods: 
+      switchBlockStatementGroup() parses a block of switch labels and their
+      associated blocks, and this method itself requires a helper method 
+      switchLabel() to parse the labels. Each of these methods are themselves
+      defined in and compliant with the grammar. 
+
+      Issues and resolution: Because the approach to this problem was so similar
+      to problem 9, I was able to avoid the same types of issues I had in that
+      problem with type mismatches. The only issue I had with this section was
+      with the parsing in statement() for the switchStatementGroup. My original
+      implementation had, inside of a kleene closed parenthetical, a single call
+      to switchBlockStatementGroup() as the argument of ArrayList.add . This 
+      raised an error with compilation, because no actual tokens were being 
+      parsed directly by this kleene closure, and javacc had issue with the null
+      string being accepted. To fix this, I declared a SwitchStatementGroup 
+      object and assigned the value of switchBlockStatementGroup() to it, then
+      added that object to the ArrayList.
+
+   Problem 13 (Exception Handlers)
+      Approach: For this problem, I had to add implementations in two different
+      places: statement() needed implementation of try statements and throw
+      statements, and memberDecl() needed implementation of throws clauses. All
+      of these implmentations come from the grammar; parsing the correct 
+      symbols, calling the correct parsing functions in sequence, and saving the 
+      values returned by those parsing functions in declared variables are all
+      done in accordance with the grammar. The types of those variables are 
+      determined by the constructors of JTryStatement, JThrowStatement, 
+      JMethodDeclaration, and JConstructorDeclaration. Finally, those same
+      constructors are called as the return values for statement() and 
+      memberDecl() where appropriate. 
+
+      Issues and resolution: None; my first attempt at implenenting my plan for 
+      the code worked perfectly.
+
+   Problem 14 (Interface Type Declaration)
+      Approach: For this problem, I had to declare interface alternatives to all
+      of the class specific methods in j--.jj: classDeclaration became 
+      interfaceDeclarataion, classBody became interfaceBody, and memberDecl 
+      became interfaceMemberDecl. Each of these new methods was similar in 
+      structure to their class counterparts, but modified to be compliant with 
+      the grammar for implementing interfaces. Also, an additional branch in 
+      typeDeclaration to check for an interfaceDeclaration was needed to 
+      facilitate entering this new recursive tree.
+
+      Issues and resolution: The only issue I had with this problem is an issue
+      that I also had in project 3: I did not add "abstract" as a mandatory
+      modifier to a method declaration in an interface. One conditional check in
+      interfaceBody() for whether mods contains "abstract" was enough to solve
+      this issue, and everything worked correctly afterwards.
+
+5. List any other comments here. Feel free to provide any feedback on how
+   much you learned from doing the assignment, and whether you enjoyed
+   doing it.
+
+   I enjoyed this project at times, but much of it felt very rote. This project
+   was about as long as projects 2 and 3 combined, and while I am getting more
+   comfortable with the processes of working with this compiler and therefore 
+   found much of it quite easy, It was still extremely long. I was also very 
+   frustrated on problem 4, as nowhere in the textbook, lecture notes, or 
+   the comments in the file is it mentioned that we are using actual regex 
+   syntax in the lexical grammar section of j--.jj, not the syntax of the 
+   grammar. Specifically, I could not figure out how to do a kleene star, 
+   brackets kept giving me an indecipherable error. I did learn a lot about how
+   a scanner and parser can be automatically generated from a grammar file, 
+   though, and found that very interesting and informative.

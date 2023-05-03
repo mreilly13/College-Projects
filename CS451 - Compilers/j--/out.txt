@@ -1,0 +1,441 @@
+{
+    "JCompilationUnit:1":
+    {
+        "source": "project5/ExceptionHandlers.java",
+        "imports": ["java.lang.ArrayIndexOutOfBoundsException", "java.lang.Double", "java.lang.Exception", "java.lang.IllegalArgumentException", "java.lang.Math", "java.lang.NumberFormatException", "java.lang.System"],
+        "CompilationUnitContext":
+        {
+            "entries": [["ExceptionHandlers", "ExceptionHandlers.class"], ["java.lang.Double", "java.lang.Double.class"], ["java.lang.System", "java.lang.System.class"], ["NumberFormatException", "java.lang.NumberFormatException.class"], ["java.lang.NumberFormatException", "java.lang.NumberFormatException.class"], ["String", "java.lang.String.class"], ["java.lang.ArrayIndexOutOfBoundsException", "java.lang.ArrayIndexOutOfBoundsException.class"], ["java.lang.IllegalArgumentException", "java.lang.IllegalArgumentException.class"], ["Math", "java.lang.Math.class"], ["Double", "java.lang.Double.class"], ["Exception", "java.lang.Exception.class"], ["java.lang.Exception", "java.lang.Exception.class"], ["System", "java.lang.System.class"], ["java.lang.Math", "java.lang.Math.class"], ["Object", "java.lang.Object.class"], ["java.lang.Object", "java.lang.Object.class"], ["java.lang.String", "java.lang.String.class"], ["ArrayIndexOutOfBoundsException", "java.lang.ArrayIndexOutOfBoundsException.class"], ["IllegalArgumentException", "java.lang.IllegalArgumentException.class"]]
+        },
+        "JClassDeclaration:9":
+        {
+            "modifiers": ["public"],
+            "name": "ExceptionHandlers",
+            "super": "java.lang.Object",
+            "ClassContext":
+            {
+            },
+            "JMethodDeclaration:10":
+            {
+                "modifiers": ["public", "static"],
+                "returnType": "void",
+                "name": "main",
+                "parameters": [["args", "java.lang.String[]"]],
+                "MethodContext":
+                {
+                    "entries": [["args", "java.lang.String[]", "0"]]
+                },
+                "JBlock:10":
+                {
+                    "LocalContext":
+                    {
+                        "entries": []
+                    },
+                    "JTryStatement:11":
+                    {
+                        "TryBlock":
+                        {
+                            "JBlock:11":
+                            {
+                                "LocalContext":
+                                {
+                                    "entries": [["result", "double", "3"], ["x", "double", "1"]]
+                                },
+                                "JVariableDeclaration:12":
+                                {
+                                    "JVariableDeclarator:12":
+                                    {
+                                        "name": "x",
+                                        "type": "double",
+                                        "Initializer":
+                                        {
+                                            "JMessageExpression:12":
+                                            {
+                                                "ambiguousPart": "Double",
+                                                "name": "parseDouble",
+                                                "Target":
+                                                {
+                                                    "JVariable:12":
+                                                    {
+                                                        "name": "Double",
+                                                        "type": "java.lang.Double"
+                                                    }
+                                                },
+                                                "Argument":
+                                                {
+                                                    "JArrayExpression:12":
+                                                    {
+                                                        "TheArray":
+                                                        {
+                                                            "JVariable:12":
+                                                            {
+                                                                "name": "args",
+                                                                "type": "java.lang.String[]"
+                                                            }
+                                                        },
+                                                        "TheIndex":
+                                                        {
+                                                            "JLiteralInt:12":
+                                                            {
+                                                                "type": "int",
+                                                                "value": "0"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "JVariableDeclaration:13":
+                                {
+                                    "JVariableDeclarator:13":
+                                    {
+                                        "name": "result",
+                                        "type": "double",
+                                        "Initializer":
+                                        {
+                                            "JMessageExpression:13":
+                                            {
+                                                "ambiguousPart": "null",
+                                                "name": "sqrt",
+                                                "Target":
+                                                {
+                                                    "JVariable:13":
+                                                    {
+                                                        "name": "ExceptionHandlers",
+                                                        "type": "ExceptionHandlers"
+                                                    }
+                                                },
+                                                "Argument":
+                                                {
+                                                    "JVariable:13":
+                                                    {
+                                                        "name": "x",
+                                                        "type": "double"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "JStatementExpression:14":
+                                {
+                                    "JMessageExpression:14":
+                                    {
+                                        "ambiguousPart": "System.out",
+                                        "name": "println",
+                                        "Target":
+                                        {
+                                            "JFieldSelection:14":
+                                            {
+                                                "ambiguousPart": "null",
+                                                "name": "out",
+                                                "Target":
+                                                {
+                                                    "JVariable:14":
+                                                    {
+                                                        "name": "System",
+                                                        "type": "java.lang.System"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "Argument":
+                                        {
+                                            "JVariable:14":
+                                            {
+                                                "name": "result",
+                                                "type": "double"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "CatchBlock":
+                        {
+                            "parameter": ["e", "ArrayIndexOutOfBoundsException"],
+                            "JBlock:15":
+                            {
+                                "LocalContext":
+                                {
+                                    "entries": []
+                                },
+                                "JStatementExpression:16":
+                                {
+                                    "JMessageExpression:16":
+                                    {
+                                        "ambiguousPart": "System.out",
+                                        "name": "println",
+                                        "Target":
+                                        {
+                                            "JFieldSelection:16":
+                                            {
+                                                "ambiguousPart": "null",
+                                                "name": "out",
+                                                "Target":
+                                                {
+                                                    "JVariable:16":
+                                                    {
+                                                        "name": "System",
+                                                        "type": "java.lang.System"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "Argument":
+                                        {
+                                            "JLiteralString:16":
+                                            {
+                                                "type": "java.lang.String",
+                                                "value": "x not specified"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "CatchBlock":
+                        {
+                            "parameter": ["e", "NumberFormatException"],
+                            "JBlock:17":
+                            {
+                                "LocalContext":
+                                {
+                                    "entries": []
+                                },
+                                "JStatementExpression:18":
+                                {
+                                    "JMessageExpression:18":
+                                    {
+                                        "ambiguousPart": "System.out",
+                                        "name": "println",
+                                        "Target":
+                                        {
+                                            "JFieldSelection:18":
+                                            {
+                                                "ambiguousPart": "null",
+                                                "name": "out",
+                                                "Target":
+                                                {
+                                                    "JVariable:18":
+                                                    {
+                                                        "name": "System",
+                                                        "type": "java.lang.System"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "Argument":
+                                        {
+                                            "JLiteralString:18":
+                                            {
+                                                "type": "java.lang.String",
+                                                "value": "x must be a double"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "CatchBlock":
+                        {
+                            "parameter": ["e", "IllegalArgumentException"],
+                            "JBlock:19":
+                            {
+                                "LocalContext":
+                                {
+                                    "entries": []
+                                },
+                                "JStatementExpression:20":
+                                {
+                                    "JMessageExpression:20":
+                                    {
+                                        "ambiguousPart": "System.out",
+                                        "name": "println",
+                                        "Target":
+                                        {
+                                            "JFieldSelection:20":
+                                            {
+                                                "ambiguousPart": "null",
+                                                "name": "out",
+                                                "Target":
+                                                {
+                                                    "JVariable:20":
+                                                    {
+                                                        "name": "System",
+                                                        "type": "java.lang.System"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "Argument":
+                                        {
+                                            "JMessageExpression:20":
+                                            {
+                                                "ambiguousPart": "e",
+                                                "name": "getMessage",
+                                                "Target":
+                                                {
+                                                    "JVariable:20":
+                                                    {
+                                                        "name": "e",
+                                                        "type": "IllegalArgumentException"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "FinallyBlock":
+                        {
+                            "JBlock:21":
+                            {
+                                "LocalContext":
+                                {
+                                    "entries": []
+                                },
+                                "JStatementExpression:22":
+                                {
+                                    "JMessageExpression:22":
+                                    {
+                                        "ambiguousPart": "System.out",
+                                        "name": "println",
+                                        "Target":
+                                        {
+                                            "JFieldSelection:22":
+                                            {
+                                                "ambiguousPart": "null",
+                                                "name": "out",
+                                                "Target":
+                                                {
+                                                    "JVariable:22":
+                                                    {
+                                                        "name": "System",
+                                                        "type": "java.lang.System"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "Argument":
+                                        {
+                                            "JLiteralString:22":
+                                            {
+                                                "type": "java.lang.String",
+                                                "value": "Done!"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "JMethodDeclaration:26":
+            {
+                "modifiers": ["private", "static"],
+                "returnType": "double",
+                "name": "sqrt",
+                "parameters": [["x", "double"]],
+                "throws": ["IllegalArgumentException"],
+                "MethodContext":
+                {
+                    "entries": [["x", "double", "0"]]
+                },
+                "JBlock:26":
+                {
+                    "LocalContext":
+                    {
+                        "entries": []
+                    },
+                    "JIfStatement:27":
+                    {
+                        "Condition":
+                        {
+                            "JBinaryExpression:27":
+                            {
+                                "operator": "<",
+                                "type": "boolean",
+                                "Operand1":
+                                {
+                                    "JVariable:27":
+                                    {
+                                        "name": "x",
+                                        "type": "double"
+                                    }
+                                },
+                                "Operand2":
+                                {
+                                    "JLiteralDouble:27":
+                                    {
+                                        "type": "double",
+                                        "value": "0.0"
+                                    }
+                                }
+                            }
+                        },
+                        "ThenPart":
+                        {
+                            "JBlock:27":
+                            {
+                                "LocalContext":
+                                {
+                                    "entries": []
+                                },
+                                "JThrowStatement:28":
+                                {
+                                    "Expression":
+                                    {
+                                        "JNewOp:28":
+                                        {
+                                            "type": "java.lang.IllegalArgumentException",
+                                            "Argument":
+                                            {
+                                                "JLiteralString:28":
+                                                {
+                                                    "type": "java.lang.String",
+                                                    "value": "x must be positve"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "JReturnStatement:30":
+                    {
+                        "Expression":
+                        {
+                            "JMessageExpression:30":
+                            {
+                                "ambiguousPart": "Math",
+                                "name": "sqrt",
+                                "Target":
+                                {
+                                    "JVariable:30":
+                                    {
+                                        "name": "Math",
+                                        "type": "java.lang.Math"
+                                    }
+                                },
+                                "Argument":
+                                {
+                                    "JVariable:30":
+                                    {
+                                        "name": "x",
+                                        "type": "double"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

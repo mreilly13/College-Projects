@@ -1,0 +1,151 @@
+1. Enter the number of hours it took you to complete the project between
+   the <<< and >>> signs below (eg, <<<10>>>).
+
+   <<<5>>>
+   
+2. Enter the difficulty level (1: very easy; 5: very difficult) of the project
+   between <<< and >>> signs below (eg, <<<3>>>).
+
+   <<<2>>>
+
+3. Did you receive help from anyone? List their names, status (classmate, 
+   CS451/651 grad, TA, other), and the nature of help received.
+
+   Name               Status       Help Received
+   ----               ------       -------------
+   N/A
+
+4. Provide a short description of how you approached each problem, issues you 
+   encountered, and how you resolved those issues.
+
+   Problem 1 (Multiline Comment)
+      Approach: Since a multiline comment starts with a '/', just like all other
+      comments, the code to handle multiline comments goes in the case for '/'
+      in the getNextToken method in Scanner.java. I added a nested if that 
+      checks for an asterisk after a slash; if one is found, then characters
+      are ignored until another asterisk is immediately followed by a slash. The
+      check condition for this loop is whether 'ch', the instance variable for
+      the next character in the input, is equivalent to the EOF character. If it
+      is, then the multiline comment was not closed correctly, which my code
+      interprets as a scanner error.
+
+      Issues and resolution: I had no issues with this problem. The outlined
+      approach was my first idea for how to handle this problem, and my first
+      attempt to write the code worked correctly.
+
+   Problem 2 (Operators)
+      Approach: My approach to this problem was exactly the same as in project 
+      1. Each operator had to be added to TokenInfo.java, then implemented in 
+      Scanner.java. This implementation required finding the case in the switch
+      statement in getNextToken for the first character in the operator, then
+      adding conditionals to check each character in turn, creating the 
+      appropriate token when the branch in the logic ends, indicating that 
+      operator is the next token. This problem involved the implementation
+      of dozens of operators, but the process for all of them was exactly the 
+      same, with the only variation being the location in the switch statement
+      the code went, the quantity and indentation of the if statements and the 
+      characters checked for, all of which varied from operator to operator.
+
+      Issues and resolution: As this problem was exactly the same as the 
+      scanning implementations in Project 1, I had almost no issues with this
+      problem; it was mostly rote work, copying and pasting existing code and
+      editing the indentation, grouping symbols, and characters being checked.
+      The only issue I found once testing my code was with the check for 
+      NOT_EQUAL, because it was missing a call to nextCh(), which was causing
+      the second character in the operator, '=', to be interpreted as a distinct
+      token in addition to the token for the not equal operator.
+   
+   Problem 3 (Reserved Words)
+      Approach: This problem was trivial; the reserved words had to be added to
+      TokenInfo in the exact same manner as the already implemented reserved 
+      words, and each reserved word requires one line of code in the constructor
+      of Scanner to actually implement, using the same syntax as the existing
+      reserved words.
+
+      Issues and resolution: I also had no issues with this problem; there was
+      no logic to implement and there were no typos in the code I wrote, so the
+      code I wrote worked on its first test.
+
+   Problem 4 (Literals)
+      Approach: As there are multiple ways a numeric literal can begin, and 
+      therefore there are multiple places in the switch statement in 
+      getNextToken that literal interpretation would be needed, I created a 
+      private helper method that will parse any numeric literal (within the 
+      constraints of this assignment) that only needs to be called from inside
+      the switch statement. This method includes and replaces the logic for 
+      scanning integer literals that was already implemented. The method has two
+      parameters: a StringBuffer that represents the parts of the numeric 
+      literal that were scanned before getNextToken determined that this is a
+      numeric literal, and a boolean that represents if this number has a 
+      decimal point in it. Both of these are for the case of a double literal 
+      that begins with a decimal point, as the scanning process for a dot 
+      necessarily scans past that dot, to determine if the dot is part of a
+      number or is being used as part of general java syntax; the method cannot
+      know if it was called from the case for dot or the case for a number, so 
+      it must have a parameter that tells it which is the case. The boolean
+      parameter is not strictly necessary for this purpose, as the contents of
+      the passed StringBuffer contain that information, but a boolean is needed
+      to track whether the numeric literal already contains a decimal point,
+      since a number cannot have more than one decimal point and extras should
+      raise an error, so it is simpler to just have both as parameters.
+      This makes the method easier to maintain in the future, as it does not 
+      perform any processing on its StringBuffer input to derive information 
+      about the type of numeric literal represented, which allows the 
+      representation of numeric literals to change in the future without 
+      breaking that part of this method (though doing so would likely require
+      the method to have new logic to scan numeric literals).
+      
+      The method has an internal boolean variable that represents whether the 
+      numeric literal is a double or not. The method then appends any number of 
+      numeric characters in sequence to the StringBuffer. Next, it checks for a 
+      decimal point; if one is detected, the method checks to see if this number
+      already had a decimal point, raising an error if so, and otherwise appends
+      that decimal point to the StringBuffer, and updates the boolean for 
+      whether this number is a double literal. After the decimal point, 
+      the method again appends any number of numeric characters. Next, the 
+      method checks for an 'e' or 'E', which signifies that this number is in 
+      scientific notation; if one is found, then the number must be a double and
+      the flag is updated accordingly. After the 'e' or 'E', the method
+      accepts any nonzero number of numeric characters as the exponent, raising 
+      an error if there were none. Finally, the method checks for a flag at the
+      end of the literal that would indicate that this number is a long or a
+      double; if the flag for a long is found but the number is already known
+      to be a double, an error is raised, but otherwise the TokenInfo for the
+      scanned literal is returned, of the appropriate type based on the 
+      terminating flag character or the characteristics of the number.
+
+      Issues and resolution: This problem took the bulk of the time I spend on 
+      this assignment. I first implemented the logic for longs by just adding a
+      check at the end of the existing logic for scanning integer literals after
+      the case statements for digits, but when I started thinking about how to
+      implement Doubles I realized that would be inadequate, since doubles can
+      start with a dot, not just with a number. This was when I decided to 
+      create a helper method for processing numeric literals that could just be
+      called in multiple places. I first tried writing the method without any 
+      parameters, but I immediately realized that that would not work, because
+      the method needed special handling if it came from the '.' case, and would
+      not know that that was the case without parameters. Once I realized this,
+      My first attmept at writing this method very nearly passed all the tests;
+      I only had two issues. The first was that numbers that did not end in a 
+      'd' or 'D' but were still doubles, either because they had a decimal point
+      or were in scientific notation, were being reported as integers because I
+      had forgotten the check at the end of the method to branch on the value of
+      the isDouble boolean variable. The other problem I had was that a 
+      malformed literal that was a double (again, because of a decimal or
+      scientific notation) that ended with an 'l' or 'L' was being reported as
+      a long, which I again fixed with a single additional check to that same
+      boolean variable.
+
+
+5. List any other comments here. Feel free to provide any feedback on how
+   much you learned from doing the assignment, and whether you enjoyed
+   doing it.
+
+   Problem 1 was an interesting, if simple, task to solve, and I enjoyed it.
+   Problem 2, however, I found extremely easy and tedious, it was exactly the
+   same as what we did in Project 1. Problem 3 was also trivially easy, but at 
+   least it introduced a new part of j-- to me, which I liked. Problem 4 I
+   enjoyed a lot, it was much more challenging than the rest of the project and
+   I liked having to tweak my logic to catch every fail case in 
+   MalformedLiterals, it was a fun puzzle. I don't know that I learned any new
+   programming skills from it, but it was at least enjoyable.
